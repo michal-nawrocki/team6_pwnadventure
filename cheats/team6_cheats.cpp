@@ -49,7 +49,7 @@ void World::Tick(float f){
 
     if(cheat_frozen){
         player->SetPosition(frozen_pos);
-        player->SetVelocity(Vector3(0, 0, 300));
+        player->SetVelocity(Vector3(0, 0, 400));
 
     }
 }
@@ -90,13 +90,13 @@ void Player::Chat(const char* msg){
         cheat_frozen = !cheat_frozen;
 
         Vector3 pos = player->GetPosition();
-        frozen_pos = Vector3(pos.x, pos.y, pos.z - 270);
+        frozen_pos = Vector3(pos.x, pos.y+150, pos.z - 50);
         player->SetPosition(frozen_pos);
     }
 
     if(strcmp(msg, "/telebear") == 0){
         printf("CHEATS: Activated TELEBEAR\n");
-        Vector3 curr_pos = Vector3(-7912, 64292, 2653);
+        Vector3 curr_pos = Vector3(-7894, 64482, 2663);
         printf("Teleporting to new pos: %f %f %f\n", curr_pos.x, curr_pos.y, curr_pos.z);
         player->SetPosition(Vector3(curr_pos.x, curr_pos.y, curr_pos.z));
     }
