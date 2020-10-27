@@ -14,11 +14,13 @@ Actor* actor;
 void (*realSetJumpState)(bool) = (void (*)(bool))dlsym(RTLD_NEXT,"_ZN6Player12SetJumpStateEb");
 Vector3 frozen_pos;
 
+int actorStep = 0;
 
 bool cheat_is_player_set = false;
 bool cheat_fly = false;
 bool cheat_run = false;
 bool cheat_frozen = false;
+bool cheat_health = false;
 
 void World::Tick(float f){
     if(!cheat_is_player_set){
@@ -52,6 +54,17 @@ void World::Tick(float f){
         player->SetVelocity(Vector3(0, 0, 400));
 
     }
+
+    if(cheat_health){
+      // float m_manaRegenTimer;
+      // float m_healthRegenCooldown;
+      // float m_healthRegenTimer;
+      player->m_manaRegenTimer = 0.0f;
+      player->m_healthRegenCooldown = 0.0f;
+      player->m_healthRegenTimer = 0.0f;
+      player->m_health = 6000;
+      player->m_mana = 6000;
+    }
 }
 
 void Player::Chat(const char* msg){
@@ -65,6 +78,10 @@ void Player::Chat(const char* msg){
     if(strcmp(msg, "/run") == 0){
         printf("CHEATS: Activated RUN\n");
         cheat_run = !cheat_run;
+    }
+    if(strcmp(msg, "/health") == 0){
+        printf("CHEATS: Activated HEALTH\n");
+        cheat_health = !cheat_health;
     }
 
     if(strcmp(msg, "/get_pos") == 0){
@@ -101,6 +118,33 @@ void Player::Chat(const char* msg){
         player->SetPosition(Vector3(curr_pos.x, curr_pos.y, curr_pos.z));
     }
 
+    if(strcmp(msg, "/tpEgg") == 0){
+        printf("CHEATS: Activated TPEGG\n");
+        //std::set<ActorRef<IActor>> m_actors;
+        // class IActor;
+        // class Actor;
+        //actor class has     Vector3 GetPosition();
+
+        std::set<ActorRef<IActor>> actors = world->m_actors;
+        std::set<ActorRef<IActor>>::iterator actorID = actors.begin();
+        if(actorStep <= world->m_actors.size()){
+          for(int i = 0; i < actorStep; i++){
+            actorID++;
+          }
+          Actor* actor = (Actor*)(actorID->m_object);
+          Vector3 position = actor->GetPosition();
+
+          player->SetPosition(Vector3(position.x, position.y, position.z+50));
+          actor->CanUse(player);
+          actorStep++;
+        }else{
+          actorStep = 0;
+          actorID = actors.begin();
+          printf("Looping from start.\n");
+        }
+
+      }
+
 }
 
 bool Player::CanJump(){
@@ -109,7 +153,7 @@ bool Player::CanJump(){
 
 void Player::SetJumpState(bool b){
     if(!cheat_fly){
-        realSetJumpState(b); 
+        realSetJumpState(b);
     }else{
         return;
     }
@@ -131,8 +175,8 @@ void Player::SetJumpState(bool b){
 //     printf("[LO] %f \n", world->m_timeUntilNextNetTick);
 //     printf ("Speed %f\n", player->m_walkingSpeed);
 
-//     // set the player jump to very high values. 
-//     // 
+//     // set the player jump to very high values.
+//     //
 //     player->m_jumpSpeed=5000;
 //     player->m_jumpHoldTime=60;
 
@@ -142,10 +186,10 @@ void Player::SetJumpState(bool b){
 //     void (*realSetJumpState)(bool);
 
 //     //To find the address of the real function we need to find its  orginal address
-//     //For this we need the "mangled" name, which we found open the libGameLogic.so 
+//     //For this we need the "mangled" name, which we found open the libGameLogic.so
 //     //file in IDA looking at the exprots and right clicking and deselecting "demangle"
 //     realSetJumpState =(void (*)(bool))dlsym(RTLD_NEXT,"_ZN6Player12SetJumpStateEb");
 
 //     printf("realSetJumpState is at: %p\n", realSetJumpState);
-//     realSetJumpState(b); 
+//     realSetJumpState(b);
 // }
