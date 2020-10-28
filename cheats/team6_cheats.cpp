@@ -15,7 +15,7 @@ void (*realSetJumpState)(bool) = (void (*)(bool))dlsym(RTLD_NEXT,"_ZN6Player12Se
 Vector3 frozen_pos;
 
 int actorStep = 0;
-Actor* goldenEggActors[50];
+Actor* goldenEggActors[11];
 int arrCount = 0;
 
 bool cheat_is_player_set = false;
@@ -109,6 +109,7 @@ void Player::Chat(const char* msg){
         cheat_frozen = !cheat_frozen;
 
         Vector3 pos = player->GetPosition();
+        // Idealy this will be -> pos: -7894.21 / 64499.97 / 2605.77
         frozen_pos = Vector3(pos.x, pos.y+150, pos.z - 50);
         player->SetPosition(frozen_pos);
     }
