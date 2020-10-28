@@ -1,0 +1,30 @@
+LD_PRELOAD=cheats.so ./PwnAdventure3-Linux-Shipping
+Using binned.
+FMallocCrash overhead is 3780608 bytes
+4.6.0-0+UE4 7038 3077 413 0
+Player typed: /tpEgg
+CHEATS: Activated TPEGG
+BluePrint: PlayerPlayer typed: /tpEgg
+CHEATS: Activated TPEGG
+BluePrint: PlayerPlayer typed: /tpEgg
+CHEATS: Activated TPEGG
+BluePrint: BallmerPeakPosterPlayer typed: /tpEgg
+CHEATS: Activated TPEGG
+BluePrint: BallmerPeakPosterPlayer typed: /tpEgg
+CHEATS: Activated TPEGG
+BluePrint: GoldenEgg3Player typed: /tpEgg
+CHEATS: Activated TPEGG
+BluePrint: JustinTolerablePlayer typed: /tpEgg
+CHEATS: Activated TPEGG
+BluePrint: LostCaveBushPlayer typed: /tpEgg
+CHEATS: Activated TPEGG
+BluePrint: GunShopOwnerPlayer typed: /tpEgg
+CHEATS: Activated TPEGG
+BluePrint: GoldenEgg3Player typed: /tpEgg
+CHEATS: Activated TPEGG
+BluePrint: GoldenEgg2Player typed: /tpEgg
+CHEATS: Activated TPEGG
+BluePrint: GoldenEgg8Player typed: /tpEgg
+CHEATS: Activated TPEGG
+BluePrint: GoldenEgg4Player typed: /tpEgg
+CHEATS: Activated TPEGG

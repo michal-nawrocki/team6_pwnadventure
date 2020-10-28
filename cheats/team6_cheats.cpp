@@ -15,6 +15,8 @@ void (*realSetJumpState)(bool) = (void (*)(bool))dlsym(RTLD_NEXT,"_ZN6Player12Se
 Vector3 frozen_pos;
 
 int actorStep = 0;
+Actor* goldenEggActors[50];
+int arrCount = 0;
 
 bool cheat_is_player_set = false;
 bool cheat_fly = false;
@@ -118,6 +120,31 @@ void Player::Chat(const char* msg){
         player->SetPosition(Vector3(curr_pos.x, curr_pos.y, curr_pos.z));
     }
 
+    if(strcmp(msg, "/findEggs") == 0){
+
+        std::set<ActorRef<IActor>> actors = world->m_actors;
+        std::set<ActorRef<IActor>>::iterator actorID = actors.begin();
+
+        for(int i = 0; i < actors.size(); i++){
+
+          Actor* actor = (Actor*)(actorID->m_object);
+          const char* actorBlueprint = actor->m_blueprintName;
+          std::string actorBlueprintName = actorBlueprint;
+
+          if(actorBlueprintName.find("GoldenEgg") != std::string::npos || actorBlueprintName.find("BallmerPeak") != std::string::npos){ // if blueprint has Golden egg go to it.
+            printf("%s\n", actorBlueprint);
+            goldenEggActors[arrCount] = actor;
+            arrCount++;
+
+          }
+
+          actorID++;
+
+        }
+        arrCount = 0;
+
+    }
+
     if(strcmp(msg, "/tpEgg") == 0){
         printf("CHEATS: Activated TPEGG\n");
         //std::set<ActorRef<IActor>> m_actors;
@@ -125,22 +152,18 @@ void Player::Chat(const char* msg){
         // class Actor;
         //actor class has     Vector3 GetPosition();
 
-        std::set<ActorRef<IActor>> actors = world->m_actors;
-        std::set<ActorRef<IActor>>::iterator actorID = actors.begin();
-        if(actorStep <= world->m_actors.size()){
-          for(int i = 0; i < actorStep; i++){
-            actorID++;
-          }
-          Actor* actor = (Actor*)(actorID->m_object);
+        if( actorStep < sizeof(goldenEggActors)){
+
+          Actor* actor = goldenEggActors[arrCount];
+          printf("inside: %s", actor->m_blueprintName);
           Vector3 position = actor->GetPosition();
 
-          player->SetPosition(Vector3(position.x, position.y, position.z+50));
-          actor->CanUse(player);
+          player->SetPosition(Vector3(position.x, position.y, position.z+180));
+
           actorStep++;
+          arrCount++;
         }else{
           actorStep = 0;
-          actorID = actors.begin();
-          printf("Looping from start.\n");
         }
 
       }
@@ -158,6 +181,8 @@ void Player::SetJumpState(bool b){
         return;
     }
 }
+
+
 
 
 // // This method will be called everytime the user jumps (presses space).
