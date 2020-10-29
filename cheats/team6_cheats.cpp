@@ -104,21 +104,20 @@ void Player::Chat(const char* msg){
         player->SetPosition(Vector3(*x, *y, *z));
     }
 
-    if(strcmp(msg, "/!") == 0){
-        printf("CHEATS: Activated TELEBEAR\n");
-        cheat_frozen = !cheat_frozen;
+    if(strcmp(msg, "/bearFlag") == 0){
+        //Simply activate cheat to tele to chest, and start bear waves
+        //Activate again to disable freeze, and "jump" out of chest
 
-        Vector3 pos = player->GetPosition();
-        // Idealy this will be -> pos: -7894.21 / 64499.97 / 2605.77
-        frozen_pos = Vector3(pos.x, pos.y+150, pos.z - 50);
-        player->SetPosition(frozen_pos);
-    }
-
-    if(strcmp(msg, "/telebear") == 0){
-        printf("CHEATS: Activated TELEBEAR\n");
+        //Move player to Bear Chest
         Vector3 curr_pos = Vector3(-7894, 64482, 2663);
         printf("Teleporting to new pos: %f %f %f\n", curr_pos.x, curr_pos.y, curr_pos.z);
         player->SetPosition(Vector3(curr_pos.x, curr_pos.y, curr_pos.z));
+
+        //Freeze player inside Bear Chest
+        cheat_frozen = !cheat_frozen;
+        Vector3 pos = player->GetPosition();
+        frozen_pos = Vector3(-7894.21, 64499.97, 2605.77);
+        player->SetPosition(frozen_pos);
     }
 
     if(strcmp(msg, "/findEggs") == 0){
