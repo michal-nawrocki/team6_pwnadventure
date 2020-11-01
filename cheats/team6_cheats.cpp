@@ -168,43 +168,42 @@ void Player::Chat(const char* msg){
 
       }
       
-    if(strcmp(msg, "/help", 5) == 0){
+    if(strncmp(msg, "/help", 5) == 0){
         //Utitilty cheat just to list the available commands, if they specify a command afterwards it describes the required input
         
         if(msg.length() == 5){
             printf("Available Commands: /fly, /run, /health, /get_pos, /teleport, /bearFlag, /findEggs, /tpEgg, /help");
         } else {
-            string command = msg.substr(6);
             
-            if(strcmp(command, "fly") == 0){
+            if(strcmp(command, "/help fly") == 0){
                 printf("Command Usage: /fly. Toggles the ability to fly in the direction you are looking.");
             }
             
-            if(strcmp(command, "run") == 0){
+            if(strcmp(command, "/help run") == 0){
                 printf("Command Usage: /run. Toggles the ability to run super fast.");
             }
             
-            if(strcmp(command, "health") == 0){
+            if(strcmp(command, "/help health") == 0){
                 printf("Command Usage: /health. Toggles a health and mana cheat to improve regeneration and maximum values.");
             }
             
-            if(strcmp(command, "get_pos") == 0){
+            if(strcmp(command, "/help get_pos") == 0){
                 printf("Command Usage: /get_pos. Returns your current player position.");
             }
             
-            if(strcmp(command, "teleport") == 0){
+            if(strcmp(command, "/help teleport") == 0){
                 printf("Command Usage: /teleport x y z. Input 3 float values to update your position with those values.");
             }
             
-            if(strcmp(command, "bearFlag") == 0){
+            if(strcmp(command, "/help bearFlag") == 0){
                 printf("Command Usage: /bearFlag. Toggles the frozen state at the chest for the bearFlag.");
             }
             
-            if(strcmp(command, "findEggs") == 0){
+            if(strcmp(command, "/help findEggs") == 0){
                 printf("Command Usage: /findEggs. Updates an array to store all the goldenEgg objects.");
             }
             
-            if(strcmp(command, "tpEgg") == 0){
+            if(strcmp(command, "/help tpEgg") == 0){
                 printf("Command Usage: /tpEgg. Teleports you to the next goldenEgg in the array, stepping through each time you call this command.");
             }
             
