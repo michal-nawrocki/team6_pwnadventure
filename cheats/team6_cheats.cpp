@@ -171,7 +171,7 @@ void Player::Chat(const char* msg){
     if(strncmp(msg, "/help", 5) == 0){
         //Utitilty cheat just to list the available commands, if they specify a command afterwards it describes the required input
         
-        if(msg.length() == 5){
+        if(strlen(msg) == 5){
             printf("Available Commands: /fly, /run, /health, /get_pos, /teleport, /bearFlag, /findEggs, /tpEgg, /help");
         } else {
             
@@ -205,6 +205,28 @@ void Player::Chat(const char* msg){
             
             if(strcmp(command, "/help tpEgg") == 0){
                 printf("Command Usage: /tpEgg. Teleports you to the next goldenEgg in the array, stepping through each time you call this command.");
+            }
+            
+        }        
+    }
+    
+    if(strncmp(msg, "/locate", 7) == 0){
+        //Utitilty cheat just to list the currently known locations by co-ordinates. Without input it lists their names and inputting a name will only display the position.
+        
+        if(strlen(msg) == 7){
+            printf("Available locations: BallmerPeak, BearChestAbove, BearChestBelow");
+        } else {
+            
+            if(strcmp(command, "/locate BallmerPeak") == 0){
+                printf(" (X Y Z) -6791.0 -11655.0 10528.0");
+            }
+            
+            if(strcmp(command, "/locate BearChestAbove") == 0){
+                printf(" (X Y Z) -7894.0 64482.0 2663.0");
+            }
+            
+            if(strcmp(command, "/locate BearChestBelow") == 0){
+                printf(" (X Y Z) -7894.21 64499.97 2605.77");
             }
             
         }        
