@@ -90,16 +90,16 @@ void Player::Chat(const char* msg){
     printf("Player typed: %s\n", msg);
 
     if(strcmp(msg, "/fly") == 0){
-        WriteInChatBox("CHEATS: Activated FLY");
+        WriteInChatBox("CHEATS: Toggled FLY");
         cheat_fly = !cheat_fly;
     }
 
     if(strcmp(msg, "/run") == 0){
-        WriteInChatBox("CHEATS: Activated RUN");
+        WriteInChatBox("CHEATS: Toggled RUN");
         cheat_run = !cheat_run;
     }
     if(strcmp(msg, "/health") == 0){
-        WriteInChatBox("CHEATS: Activated HEALTH");
+        WriteInChatBox("CHEATS: Toggled HEALTH");
         cheat_health = !cheat_health;
     }
 
@@ -114,7 +114,7 @@ void Player::Chat(const char* msg){
     }
 
     if(strncmp("/teleport ", msg, 10) == 0){
-        printf("CHEATS: Activated TELEPORT");
+        printf("CHEATS: Toggled TELEPORT");
 
         float* x;
         float* y;
@@ -172,7 +172,7 @@ void Player::Chat(const char* msg){
     }
 
     if(strcmp(msg, "/tpEgg") == 0){
-        WriteInChatBox("CHEATS: Activated TPEGG");
+        WriteInChatBox("CHEATS: Toggled TPEGG");
         // std::set<ActorRef<IActor>> m_actors;
         // class IActor;
         // class Actor;
@@ -228,12 +228,15 @@ void Player::Chat(const char* msg){
                 terminate called after throwing an instance of 'std::logic_error'
                 what():  basic_string::_S_construct null not valid
                 ./run_game.sh: line 5: 10226 Aborted                 (core dumped) LD_PRELOAD=cheats/cheats.so ./PwnAdventure3-Linux-Shipping
+
+            Include an try{}catch(std::logic_error){} to mitigate the crash.
+            TODO: Fix this!
        */
 
         WriteInChatBox("!!! THIS CHEAT CRASHES THE GAME !!!");
         WriteInChatBox("CHEATS: Send message to other players, like a normal chat.");
         void (*realChat)(const char*) = (void (*)(const char*))dlsym(RTLD_NEXT,"_ZN6Player4ChatEPKc");
-        realChat(msg+5);
+        realChat(msg);
     }
       
     if(strncmp(msg, "/help", 5) == 0){
