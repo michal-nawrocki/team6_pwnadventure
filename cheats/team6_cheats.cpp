@@ -28,14 +28,17 @@ bool cheat_health = false;
 
 
 /* 
- * Helper functions 
+    Helper functions 
  */
 void WriteInChatBox(const char* msg){
+    /*
+        Print string in Player's chat box
+    */
     iplayer->GetLocalPlayer()->OnChatMessage("Team6_Cheats", true, msg);  
 }
 
 /*
- * Override functions 
+    Override functions 
  */
 void World::Tick(float f){
     if(!cheat_is_player_set){
@@ -118,15 +121,15 @@ void Player::Chat(const char* msg){
     }
 
     if(strcmp(msg, "/bearFlag") == 0){
-        //Simply activate cheat to tele to chest, and start bear waves
-        //Activate again to disable freeze, and "jump" out of chest
+        // Simply activate cheat to tele to chest, and start bear waves
+        // Activate again to disable freeze, and "jump" out of chest
 
-        //Move player to Bear Chest
+        // Move player to Bear Chest
         Vector3 curr_pos = Vector3(-7894, 64482, 2663);
         printf("Teleporting to new pos: %f %f %f\n", curr_pos.x, curr_pos.y, curr_pos.z);
         player->SetPosition(Vector3(curr_pos.x, curr_pos.y, curr_pos.z));
 
-        //Freeze player inside Bear Chest
+        // Freeze player inside Bear Chest
         cheat_frozen = !cheat_frozen;
         Vector3 pos = player->GetPosition();
         frozen_pos = Vector3(-7894.21, 64499.97, 2605.77);
@@ -144,7 +147,8 @@ void Player::Chat(const char* msg){
           const char* actorBlueprint = actor->m_blueprintName;
           std::string actorBlueprintName = actorBlueprint;
 
-          if(actorBlueprintName.find("GoldenEgg") != std::string::npos || actorBlueprintName.find("BallmerPeak") != std::string::npos){ // if blueprint has Golden egg go to it.
+          // if blueprint has Golden egg go to it.
+          if(actorBlueprintName.find("GoldenEgg") != std::string::npos || actorBlueprintName.find("BallmerPeak") != std::string::npos){
             printf("%s\n", actorBlueprint);
             goldenEggActors[arrCount] = actor;
             arrCount++;
@@ -160,10 +164,10 @@ void Player::Chat(const char* msg){
 
     if(strcmp(msg, "/tpEgg") == 0){
         WriteInChatBox("CHEATS: Activated TPEGG\n");
-        //std::set<ActorRef<IActor>> m_actors;
+        // std::set<ActorRef<IActor>> m_actors;
         // class IActor;
         // class Actor;
-        //actor class has     Vector3 GetPosition();
+        // actor class has     Vector3 GetPosition();
 
         if( actorStep < sizeof(goldenEggActors)){
 
@@ -182,64 +186,70 @@ void Player::Chat(const char* msg){
       }
       
     if(strncmp(msg, "/help", 5) == 0){
-        //Utitilty cheat just to list the available commands, if they specify a command afterwards it describes the required input
+        /* 
+            Utitilty cheat just to list the available commands,
+            if they specify a command afterwards it describes the required input.
+        */
         
         if(strlen(msg) == 5){
-            WriteInChatBox("Available Commands:\n/fly, /run, /health,\n/get_pos, /teleport, /bearFlag,\n/findEggs, /tpEgg, /help,\n/locate\n");
+            WriteInChatBox("Available Commands:\n/fly, /run, /health,\n/get_pos, /teleport, /bearFlag,\n/findEggs, /tpEgg, /help,\n/locate, /help <command>");
         } else {
             
             if(strcmp(msg, "/help fly") == 0){
-                WriteInChatBox("Command Usage: /fly.\nToggles the ability to fly in the direction you are looking. \n");
+                WriteInChatBox("Command Usage: /fly.\nToggles the ability to fly in the direction you are looking.");
             }
             
             if(strcmp(msg, "/help run") == 0){
-                WriteInChatBox("Command Usage: /run.\nToggles the ability to run super fast. \n");
+                WriteInChatBox("Command Usage: /run.\nToggles the ability to run super fast.");
             }
             
             if(strcmp(msg, "/help health") == 0){
-                WriteInChatBox("Command Usage: /health.\nToggles a health and mana cheat to improve regeneration and maximum values. \n");
+                WriteInChatBox("Command Usage: /health.\nToggles a health and mana cheat to improve regeneration and maximum values.");
             }
             
             if(strcmp(msg, "/help get_pos") == 0){
-                WriteInChatBox("Command Usage: /get_pos.\nReturns your current player position. \n");
+                WriteInChatBox("Command Usage: /get_pos.\nReturns your current player position.");
             }
             
             if(strcmp(msg, "/help teleport") == 0){
-                WriteInChatBox("Command Usage: /teleport x y z.\nInput 3 float values to update your position with those values. \n");
+                WriteInChatBox("Command Usage: /teleport x y z.\nInput 3 float values to update your position with those values.");
             }
             
             if(strcmp(msg, "/help bearFlag") == 0){
-                WriteInChatBox("Command Usage: /bearFlag.\nToggles the frozen state at the chest for the bearFlag. \n");
+                WriteInChatBox("Command Usage: /bearFlag.\nToggles the frozen state at the chest for the bearFlag.");
             }
             
             if(strcmp(msg, "/help findEggs") == 0){
-                WriteInChatBox("Command Usage: /findEggs.\nUpdates an array to store all the goldenEgg objects. \n");
+                WriteInChatBox("Command Usage: /findEggs.\nUpdates an array to store all the goldenEgg objects.");
             }
             
             if(strcmp(msg, "/help tpEgg") == 0){
-                WriteInChatBox("Command Usage: /tpEgg.\nTeleports you to the next goldenEgg in the array, stepping through each time you call this command. \n");
+                WriteInChatBox("Command Usage: /tpEgg.\nTeleports you to the next goldenEgg in the array, stepping through each time you call this command.");
             }
             
         }        
     }
     
     if(strncmp(msg, "/locate", 7) == 0){
-        //Utitilty cheat just to list the currently known locations by co-ordinates. Without input it lists their names and inputting a name will only display the position.
+        /*
+            Utitilty cheat just to list the currently known locations by co-ordinates.
+            Without input it lists their names and inputting a name will only display the position.
+         */
         
         if(strlen(msg) == 7){
-            WriteInChatBox("Available locations:\nBallmerPeak, BearChestAbove, BearChestBelow \n");
+            WriteInChatBox("Available locations:\nBallmerPeak, BearChestAbove, BearChestBelow");
         } else {
             
             if(strcmp(msg, "/locate BallmerPeak") == 0){
-                WriteInChatBox(" (X Y Z) -6791.0 -11655.0 10528.0 \n");
+                WriteInChatBox(" (X Y Z) -6791.0 -11655.0 10528.0");
             }
             
             if(strcmp(msg, "/locate BearChestAbove") == 0){
-                WriteInChatBox(" (X Y Z) -7894.0 64482.0 2663.0 \n");
+                WriteInChatBox(" (X Y Z) -7894.0 64482.0 2663.0");
             }
             
             if(strcmp(msg, "/locate BearChestBelow") == 0){
-                WriteInChatBox(" (X Y Z) -7894.21 64499.97 2605.77 \n");
+                WriteInChatBox(" (X Y Z) -7894.21 64499.97 2605.77");
             }
             
         }        
