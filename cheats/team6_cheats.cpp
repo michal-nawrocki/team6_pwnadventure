@@ -172,39 +172,39 @@ void Player::Chat(const char* msg){
         //Utitilty cheat just to list the available commands, if they specify a command afterwards it describes the required input
         
         if(strlen(msg) == 5){
-            printf("Available Commands: /fly, /run, /health, /get_pos, /teleport, /bearFlag, /findEggs, /tpEgg, /help");
+            printf("Available Commands: /fly, /run, /health, /get_pos, /teleport, /bearFlag, /findEggs, /tpEgg, /help, /locate \n");
         } else {
             
             if(strcmp(msg, "/help fly") == 0){
-                printf("Command Usage: /fly. Toggles the ability to fly in the direction you are looking.");
+                printf("Command Usage: /fly. Toggles the ability to fly in the direction you are looking. \n");
             }
             
             if(strcmp(msg, "/help run") == 0){
-                printf("Command Usage: /run. Toggles the ability to run super fast.");
+                printf("Command Usage: /run. Toggles the ability to run super fast. \n");
             }
             
             if(strcmp(msg, "/help health") == 0){
-                printf("Command Usage: /health. Toggles a health and mana cheat to improve regeneration and maximum values.");
+                printf("Command Usage: /health. Toggles a health and mana cheat to improve regeneration and maximum values. \n");
             }
             
             if(strcmp(msg, "/help get_pos") == 0){
-                printf("Command Usage: /get_pos. Returns your current player position.");
+                printf("Command Usage: /get_pos. Returns your current player position. \n");
             }
             
             if(strcmp(msg, "/help teleport") == 0){
-                printf("Command Usage: /teleport x y z. Input 3 float values to update your position with those values.");
+                printf("Command Usage: /teleport x y z. Input 3 float values to update your position with those values. \n");
             }
             
             if(strcmp(msg, "/help bearFlag") == 0){
-                printf("Command Usage: /bearFlag. Toggles the frozen state at the chest for the bearFlag.");
+                printf("Command Usage: /bearFlag. Toggles the frozen state at the chest for the bearFlag. \n");
             }
             
             if(strcmp(msg, "/help findEggs") == 0){
-                printf("Command Usage: /findEggs. Updates an array to store all the goldenEgg objects.");
+                printf("Command Usage: /findEggs. Updates an array to store all the goldenEgg objects. \n");
             }
             
             if(strcmp(msg, "/help tpEgg") == 0){
-                printf("Command Usage: /tpEgg. Teleports you to the next goldenEgg in the array, stepping through each time you call this command.");
+                printf("Command Usage: /tpEgg. Teleports you to the next goldenEgg in the array, stepping through each time you call this command. \n");
             }
             
         }        
@@ -214,19 +214,19 @@ void Player::Chat(const char* msg){
         //Utitilty cheat just to list the currently known locations by co-ordinates. Without input it lists their names and inputting a name will only display the position.
         
         if(strlen(msg) == 7){
-            printf("Available locations: BallmerPeak, BearChestAbove, BearChestBelow");
+            printf("Available locations: BallmerPeak, BearChestAbove, BearChestBelow \n");
         } else {
             
             if(strcmp(msg, "/locate BallmerPeak") == 0){
-                printf(" (X Y Z) -6791.0 -11655.0 10528.0");
+                printf(" (X Y Z) -6791.0 -11655.0 10528.0 \n");
             }
             
             if(strcmp(msg, "/locate BearChestAbove") == 0){
-                printf(" (X Y Z) -7894.0 64482.0 2663.0");
+                printf(" (X Y Z) -7894.0 64482.0 2663.0 \n");
             }
             
             if(strcmp(msg, "/locate BearChestBelow") == 0){
-                printf(" (X Y Z) -7894.21 64499.97 2605.77");
+                printf(" (X Y Z) -7894.21 64499.97 2605.77 \n");
             }
             
         }        
