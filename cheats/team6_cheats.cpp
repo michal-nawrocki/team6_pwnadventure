@@ -12,6 +12,8 @@ IPlayer* iplayer;
 Player* player;
 Actor* actor;
 void (*realSetJumpState)(bool) = (void (*)(bool))dlsym(RTLD_NEXT,"_ZN6Player12SetJumpStateEb");
+void (*realPerformChat)(const std::string&) = (void (*)(const std::string&))dlsym(RTLD_NEXT,"_ZN6Player11PerformChatERKSs");
+
 Vector3 frozen_pos;
 
 int actorStep = 0;
@@ -24,6 +26,17 @@ bool cheat_run = false;
 bool cheat_frozen = false;
 bool cheat_health = false;
 
+
+/* 
+ * Helper functions 
+ */
+void WriteInChatBox(const char* msg){
+    iplayer->GetLocalPlayer()->OnChatMessage("Team6_Cheats", true, msg);  
+}
+
+/*
+ * Override functions 
+ */
 void World::Tick(float f){
     if(!cheat_is_player_set){
         world = *((ClientWorld**)(dlsym(RTLD_NEXT, "GameWorld")));
@@ -73,22 +86,22 @@ void Player::Chat(const char* msg){
     printf("Player typed: %s\n", msg);
 
     if(strcmp(msg, "/fly") == 0){
-        printf("CHEATS: Activated FLY\n");
+        WriteInChatBox("CHEATS: Activated FLY\n");
         cheat_fly = !cheat_fly;
     }
 
     if(strcmp(msg, "/run") == 0){
-        printf("CHEATS: Activated RUN\n");
+        WriteInChatBox("CHEATS: Activated RUN\n");
         cheat_run = !cheat_run;
     }
     if(strcmp(msg, "/health") == 0){
-        printf("CHEATS: Activated HEALTH\n");
+        WriteInChatBox("CHEATS: Activated HEALTH\n");
         cheat_health = !cheat_health;
     }
 
     if(strcmp(msg, "/get_pos") == 0){
         Vector3 pos = player->GetPosition();
-        printf("CHEATS: Get position:\n");
+        WriteInChatBox("CHEATS: Get position:\n");
         printf("Player pos: %.2f / %.2f / %.2f\n", pos.x, pos.y, pos.z);
     }
 
@@ -146,7 +159,7 @@ void Player::Chat(const char* msg){
     }
 
     if(strcmp(msg, "/tpEgg") == 0){
-        printf("CHEATS: Activated TPEGG\n");
+        WriteInChatBox("CHEATS: Activated TPEGG\n");
         //std::set<ActorRef<IActor>> m_actors;
         // class IActor;
         // class Actor;
@@ -172,39 +185,39 @@ void Player::Chat(const char* msg){
         //Utitilty cheat just to list the available commands, if they specify a command afterwards it describes the required input
         
         if(strlen(msg) == 5){
-            printf("Available Commands: /fly, /run, /health, /get_pos, /teleport, /bearFlag, /findEggs, /tpEgg, /help, /locate \n");
+            WriteInChatBox("Available Commands:\n/fly, /run, /health,\n/get_pos, /teleport, /bearFlag,\n/findEggs, /tpEgg, /help,\n/locate\n");
         } else {
             
             if(strcmp(msg, "/help fly") == 0){
-                printf("Command Usage: /fly. Toggles the ability to fly in the direction you are looking. \n");
+                WriteInChatBox("Command Usage: /fly.\nToggles the ability to fly in the direction you are looking. \n");
             }
             
             if(strcmp(msg, "/help run") == 0){
-                printf("Command Usage: /run. Toggles the ability to run super fast. \n");
+                WriteInChatBox("Command Usage: /run.\nToggles the ability to run super fast. \n");
             }
             
             if(strcmp(msg, "/help health") == 0){
-                printf("Command Usage: /health. Toggles a health and mana cheat to improve regeneration and maximum values. \n");
+                WriteInChatBox("Command Usage: /health.\nToggles a health and mana cheat to improve regeneration and maximum values. \n");
             }
             
             if(strcmp(msg, "/help get_pos") == 0){
-                printf("Command Usage: /get_pos. Returns your current player position. \n");
+                WriteInChatBox("Command Usage: /get_pos.\nReturns your current player position. \n");
             }
             
             if(strcmp(msg, "/help teleport") == 0){
-                printf("Command Usage: /teleport x y z. Input 3 float values to update your position with those values. \n");
+                WriteInChatBox("Command Usage: /teleport x y z.\nInput 3 float values to update your position with those values. \n");
             }
             
             if(strcmp(msg, "/help bearFlag") == 0){
-                printf("Command Usage: /bearFlag. Toggles the frozen state at the chest for the bearFlag. \n");
+                WriteInChatBox("Command Usage: /bearFlag.\nToggles the frozen state at the chest for the bearFlag. \n");
             }
             
             if(strcmp(msg, "/help findEggs") == 0){
-                printf("Command Usage: /findEggs. Updates an array to store all the goldenEgg objects. \n");
+                WriteInChatBox("Command Usage: /findEggs.\nUpdates an array to store all the goldenEgg objects. \n");
             }
             
             if(strcmp(msg, "/help tpEgg") == 0){
-                printf("Command Usage: /tpEgg. Teleports you to the next goldenEgg in the array, stepping through each time you call this command. \n");
+                WriteInChatBox("Command Usage: /tpEgg.\nTeleports you to the next goldenEgg in the array, stepping through each time you call this command. \n");
             }
             
         }        
@@ -214,19 +227,19 @@ void Player::Chat(const char* msg){
         //Utitilty cheat just to list the currently known locations by co-ordinates. Without input it lists their names and inputting a name will only display the position.
         
         if(strlen(msg) == 7){
-            printf("Available locations: BallmerPeak, BearChestAbove, BearChestBelow \n");
+            WriteInChatBox("Available locations:\nBallmerPeak, BearChestAbove, BearChestBelow \n");
         } else {
             
             if(strcmp(msg, "/locate BallmerPeak") == 0){
-                printf(" (X Y Z) -6791.0 -11655.0 10528.0 \n");
+                WriteInChatBox(" (X Y Z) -6791.0 -11655.0 10528.0 \n");
             }
             
             if(strcmp(msg, "/locate BearChestAbove") == 0){
-                printf(" (X Y Z) -7894.0 64482.0 2663.0 \n");
+                WriteInChatBox(" (X Y Z) -7894.0 64482.0 2663.0 \n");
             }
             
             if(strcmp(msg, "/locate BearChestBelow") == 0){
-                printf(" (X Y Z) -7894.21 64499.97 2605.77 \n");
+                WriteInChatBox(" (X Y Z) -7894.21 64499.97 2605.77 \n");
             }
             
         }        
@@ -245,40 +258,3 @@ void Player::SetJumpState(bool b){
         return;
     }
 }
-
-
-
-
-// // This method will be called everytime the user jumps (presses space).
-// void Player::SetJumpState(bool b) {
-
-//     // load a pointer to the GameWorld object:
-//     ClientWorld* world = *((ClientWorld**)(dlsym(RTLD_NEXT, "GameWorld")));
-
-//     // we know these names from the libGameLogic.h file.
-//     IPlayer* iplayer = world->m_activePlayer.m_object;
-//     Player* player = ((Player*)(iplayer));
-//     Actor* actor = ((Actor*)(iplayer));
-
-//     // print some data to the console that was used to start the program
-//     printf("[LO] %f \n", world->m_timeUntilNextNetTick);
-//     printf ("Speed %f\n", player->m_walkingSpeed);
-
-//     // set the player jump to very high values.
-//     //
-//     player->m_jumpSpeed=5000;
-//     player->m_jumpHoldTime=60;
-
-//     // We now need to call the orginal Set Jump State method, otherwise the server
-//     // (and other players) will not see us jump. Here is a pointer we will set to
-//     // that function:
-//     void (*realSetJumpState)(bool);
-
-//     //To find the address of the real function we need to find its  orginal address
-//     //For this we need the "mangled" name, which we found open the libGameLogic.so
-//     //file in IDA looking at the exprots and right clicking and deselecting "demangle"
-//     realSetJumpState =(void (*)(bool))dlsym(RTLD_NEXT,"_ZN6Player12SetJumpStateEb");
-
-//     printf("realSetJumpState is at: %p\n", realSetJumpState);
-//     realSetJumpState(b);
-// }
