@@ -175,35 +175,35 @@ void Player::Chat(const char* msg){
             printf("Available Commands: /fly, /run, /health, /get_pos, /teleport, /bearFlag, /findEggs, /tpEgg, /help");
         } else {
             
-            if(strcmp(command, "/help fly") == 0){
+            if(strcmp(msg, "/help fly") == 0){
                 printf("Command Usage: /fly. Toggles the ability to fly in the direction you are looking.");
             }
             
-            if(strcmp(command, "/help run") == 0){
+            if(strcmp(msg, "/help run") == 0){
                 printf("Command Usage: /run. Toggles the ability to run super fast.");
             }
             
-            if(strcmp(command, "/help health") == 0){
+            if(strcmp(msg, "/help health") == 0){
                 printf("Command Usage: /health. Toggles a health and mana cheat to improve regeneration and maximum values.");
             }
             
-            if(strcmp(command, "/help get_pos") == 0){
+            if(strcmp(msg, "/help get_pos") == 0){
                 printf("Command Usage: /get_pos. Returns your current player position.");
             }
             
-            if(strcmp(command, "/help teleport") == 0){
+            if(strcmp(msg, "/help teleport") == 0){
                 printf("Command Usage: /teleport x y z. Input 3 float values to update your position with those values.");
             }
             
-            if(strcmp(command, "/help bearFlag") == 0){
+            if(strcmp(msg, "/help bearFlag") == 0){
                 printf("Command Usage: /bearFlag. Toggles the frozen state at the chest for the bearFlag.");
             }
             
-            if(strcmp(command, "/help findEggs") == 0){
+            if(strcmp(msg, "/help findEggs") == 0){
                 printf("Command Usage: /findEggs. Updates an array to store all the goldenEgg objects.");
             }
             
-            if(strcmp(command, "/help tpEgg") == 0){
+            if(strcmp(msg, "/help tpEgg") == 0){
                 printf("Command Usage: /tpEgg. Teleports you to the next goldenEgg in the array, stepping through each time you call this command.");
             }
             
@@ -217,15 +217,15 @@ void Player::Chat(const char* msg){
             printf("Available locations: BallmerPeak, BearChestAbove, BearChestBelow");
         } else {
             
-            if(strcmp(command, "/locate BallmerPeak") == 0){
+            if(strcmp(msg, "/locate BallmerPeak") == 0){
                 printf(" (X Y Z) -6791.0 -11655.0 10528.0");
             }
             
-            if(strcmp(command, "/locate BearChestAbove") == 0){
+            if(strcmp(msg, "/locate BearChestAbove") == 0){
                 printf(" (X Y Z) -7894.0 64482.0 2663.0");
             }
             
-            if(strcmp(command, "/locate BearChestBelow") == 0){
+            if(strcmp(msg, "/locate BearChestBelow") == 0){
                 printf(" (X Y Z) -7894.21 64499.97 2605.77");
             }
             
