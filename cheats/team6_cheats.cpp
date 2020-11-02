@@ -14,7 +14,6 @@ IPlayer* iplayer;
 Player* player;
 Actor* actor;
 void (*realSetJumpState)(bool) = (void (*)(bool))dlsym(RTLD_NEXT,"_ZN6Player12SetJumpStateEb");
-void (*realPerformChat)(const std::string&) = (void (*)(const std::string&))dlsym(RTLD_NEXT,"_ZN6Player11PerformChatERKSs");
 
 Vector3 frozen_pos;
 
@@ -193,7 +192,49 @@ void Player::Chat(const char* msg){
           actorStep = 0;
         }
 
-      }
+    }
+
+    if(strncmp(msg, "/locate", 7) == 0){
+        /*
+            Utitilty cheat just to list the currently known locations by co-ordinates.
+            Without input it lists their names and inputting a name will only display the position.
+         */
+        
+        if(strlen(msg) == 7){
+            WriteInChatBox("Available locations:\nBallmerPeak, BearChestAbove, BearChestBelow");
+        }else{
+    
+            if(strcmp(msg, "/locate BallmerPeak") == 0){
+                WriteInChatBox(" (X Y Z) -6791.0 -11655.0 10528.0");
+            }
+            
+            if(strcmp(msg, "/locate BearChestAbove") == 0){
+                WriteInChatBox(" (X Y Z) -7894.0 64482.0 2663.0");
+            }
+            
+            if(strcmp(msg, "/locate BearChestBelow") == 0){
+                WriteInChatBox(" (X Y Z) -7894.21 64499.97 2605.77");
+            }
+            
+        }        
+    }
+
+    if(strncmp(msg, "/say ", 5) == 0){
+       /*
+            Write a message to in-game chat, like a normal chat would behave.
+            Currently, it is throwing this error:
+
+                Player typed: /say hello!
+                terminate called after throwing an instance of 'std::logic_error'
+                what():  basic_string::_S_construct null not valid
+                ./run_game.sh: line 5: 10226 Aborted                 (core dumped) LD_PRELOAD=cheats/cheats.so ./PwnAdventure3-Linux-Shipping
+       */
+
+        WriteInChatBox("!!! THIS CHEAT CRASHES THE GAME !!!");
+        WriteInChatBox("CHEATS: Send message to other players, like a normal chat.");
+        void (*realChat)(const char*) = (void (*)(const char*))dlsym(RTLD_NEXT,"_ZN6Player4ChatEPKc");
+        realChat(msg+5);
+    }
       
     if(strncmp(msg, "/help", 5) == 0){
         /* 
@@ -239,32 +280,6 @@ void Player::Chat(const char* msg){
             
         }        
     }
-    
-    if(strncmp(msg, "/locate", 7) == 0){
-        /*
-            Utitilty cheat just to list the currently known locations by co-ordinates.
-            Without input it lists their names and inputting a name will only display the position.
-         */
-        
-        if(strlen(msg) == 7){
-            WriteInChatBox("Available locations:\nBallmerPeak, BearChestAbove, BearChestBelow");
-        } else {
-            
-            if(strcmp(msg, "/locate BallmerPeak") == 0){
-                WriteInChatBox(" (X Y Z) -6791.0 -11655.0 10528.0");
-            }
-            
-            if(strcmp(msg, "/locate BearChestAbove") == 0){
-                WriteInChatBox(" (X Y Z) -7894.0 64482.0 2663.0");
-            }
-            
-            if(strcmp(msg, "/locate BearChestBelow") == 0){
-                WriteInChatBox(" (X Y Z) -7894.21 64499.97 2605.77");
-            }
-            
-        }        
-    }
-
 }
 
 bool Player::CanJump(){
