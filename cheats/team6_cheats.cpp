@@ -6,7 +6,9 @@
 #include <vector>
 #include "libGameLogic.h"
 
-// Globals for cheats
+/*
+    Cheat globals
+*/
 ClientWorld* world;
 IPlayer* iplayer;
 Player* player;
@@ -89,34 +91,40 @@ void Player::Chat(const char* msg){
     printf("Player typed: %s\n", msg);
 
     if(strcmp(msg, "/fly") == 0){
-        WriteInChatBox("CHEATS: Activated FLY\n");
+        WriteInChatBox("CHEATS: Activated FLY");
         cheat_fly = !cheat_fly;
     }
 
     if(strcmp(msg, "/run") == 0){
-        WriteInChatBox("CHEATS: Activated RUN\n");
+        WriteInChatBox("CHEATS: Activated RUN");
         cheat_run = !cheat_run;
     }
     if(strcmp(msg, "/health") == 0){
-        WriteInChatBox("CHEATS: Activated HEALTH\n");
+        WriteInChatBox("CHEATS: Activated HEALTH");
         cheat_health = !cheat_health;
     }
 
     if(strcmp(msg, "/get_pos") == 0){
         Vector3 pos = player->GetPosition();
-        WriteInChatBox("CHEATS: Get position:\n");
-        printf("Player pos: %.2f / %.2f / %.2f\n", pos.x, pos.y, pos.z);
+        WriteInChatBox("CHEATS: Get position:");
+
+        char buffer[100];
+        sprintf(buffer, "Player pos: %.2f / %.2f / %.2f", pos.x, pos.y, pos.z);
+        
+        WriteInChatBox(buffer);
     }
 
     if(strncmp("/teleport ", msg, 10) == 0){
-        printf("CHEATS: Activated TELEPORT\n");
+        printf("CHEATS: Activated TELEPORT");
 
         float* x;
         float* y;
         float* z;
         sscanf(msg+10, "%f %f %f", x, y, z);
 
-        printf("Teleporting to new pos: %f %f %f\n", *x, *y, *z);
+        char buffer[100];
+        sprintf(buffer, "Teleporting to new pos: %f %f %f", *x, *y, *z) ;
+        WriteInChatBox(buffer);
         player->SetPosition(Vector3(*x, *y, *z));
     }
 
@@ -126,7 +134,9 @@ void Player::Chat(const char* msg){
 
         // Move player to Bear Chest
         Vector3 curr_pos = Vector3(-7894, 64482, 2663);
-        printf("Teleporting to new pos: %f %f %f\n", curr_pos.x, curr_pos.y, curr_pos.z);
+        char buffer[100];
+        sprintf(buffer, "Teleporting to new pos: %f %f %f", curr_pos.x, curr_pos.y, curr_pos.z);
+        WriteInChatBox(buffer);
         player->SetPosition(Vector3(curr_pos.x, curr_pos.y, curr_pos.z));
 
         // Freeze player inside Bear Chest
@@ -163,7 +173,7 @@ void Player::Chat(const char* msg){
     }
 
     if(strcmp(msg, "/tpEgg") == 0){
-        WriteInChatBox("CHEATS: Activated TPEGG\n");
+        WriteInChatBox("CHEATS: Activated TPEGG");
         // std::set<ActorRef<IActor>> m_actors;
         // class IActor;
         // class Actor;
