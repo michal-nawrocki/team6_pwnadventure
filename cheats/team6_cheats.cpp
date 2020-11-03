@@ -14,6 +14,7 @@ IPlayer* iplayer;
 Player* player;
 Actor* actor;
 void (*realSetJumpState)(bool) = (void (*)(bool))dlsym(RTLD_NEXT,"_ZN6Player12SetJumpStateEb");
+void (*realPerformChat)(const std::string&) = (void (*)(const std::string&))dlsym(RTLD_NEXT,"_ZN6Player11PerformChatERKSs");
 
 Vector3 frozen_pos;
 
@@ -27,19 +28,18 @@ bool cheat_run = false;
 bool cheat_frozen = false;
 bool cheat_health = false;
 
-
-/* 
-    Helper functions 
+/*
+    Helper functions
  */
 void WriteInChatBox(const char* msg){
     /*
         Print string in Player's chat box
     */
-    iplayer->GetLocalPlayer()->OnChatMessage("Team6_Cheats", true, msg);  
+    iplayer->GetLocalPlayer()->OnChatMessage("Team6_Cheats", true, msg);
 }
 
 /*
-    Override functions 
+    Override functions
  */
 void World::Tick(float f){
     if(!cheat_is_player_set){
@@ -90,16 +90,16 @@ void Player::Chat(const char* msg){
     printf("Player typed: %s\n", msg);
 
     if(strcmp(msg, "/fly") == 0){
-        WriteInChatBox("CHEATS: Toggled FLY");
+        WriteInChatBox("CHEATS: Activated FLY");
         cheat_fly = !cheat_fly;
     }
 
     if(strcmp(msg, "/run") == 0){
-        WriteInChatBox("CHEATS: Toggled RUN");
+        WriteInChatBox("CHEATS: Activated RUN");
         cheat_run = !cheat_run;
     }
     if(strcmp(msg, "/health") == 0){
-        WriteInChatBox("CHEATS: Toggled HEALTH");
+        WriteInChatBox("CHEATS: Activated HEALTH");
         cheat_health = !cheat_health;
     }
 
@@ -109,12 +109,12 @@ void Player::Chat(const char* msg){
 
         char buffer[100];
         sprintf(buffer, "Player pos: %.2f / %.2f / %.2f", pos.x, pos.y, pos.z);
-        
+
         WriteInChatBox(buffer);
     }
 
     if(strncmp("/teleport ", msg, 10) == 0){
-        printf("CHEATS: Toggled TELEPORT");
+        printf("CHEATS: Activated TELEPORT");
 
         float* x;
         float* y;
@@ -158,7 +158,8 @@ void Player::Chat(const char* msg){
 
           // if blueprint has Golden egg go to it.
           if(actorBlueprintName.find("GoldenEgg") != std::string::npos || actorBlueprintName.find("BallmerPeak") != std::string::npos){
-            printf("%s\n", actorBlueprint);
+
+            WriteInChatBox(actorBlueprint);
             goldenEggActors[arrCount] = actor;
             arrCount++;
 
@@ -172,14 +173,14 @@ void Player::Chat(const char* msg){
     }
 
     if(strcmp(msg, "/tpEgg") == 0){
-        WriteInChatBox("CHEATS: Toggled TPEGG");
+        WriteInChatBox("CHEATS: Activated TPEGG");
         // std::set<ActorRef<IActor>> m_actors;
         // class IActor;
         // class Actor;
         // actor class has     Vector3 GetPosition();
 
         if( actorStep < sizeof(goldenEggActors)){
-
+          
           Actor* actor = goldenEggActors[arrCount];
           printf("inside: %s", actor->m_blueprintName);
           Vector3 position = actor->GetPosition();
@@ -190,8 +191,54 @@ void Player::Chat(const char* msg){
           arrCount++;
         }else{
           actorStep = 0;
+          arrCount = 0;
         }
 
+      }
+
+    if(strncmp(msg, "/help", 5) == 0){
+        /*
+            Utitilty cheat just to list the available commands,
+            if they specify a command afterwards it describes the required input.
+        */
+
+        if(strlen(msg) == 5){
+            WriteInChatBox("Available Commands:\n/fly, /run, /health,\n/get_pos, /teleport, /bearFlag,\n/findEggs, /tpEgg, /help,\n/locate, /help <command>");
+        } else {
+
+            if(strcmp(msg, "/help fly") == 0){
+                WriteInChatBox("Command Usage: /fly.\nToggles the ability to fly in the direction you are looking.");
+            }
+
+            if(strcmp(msg, "/help run") == 0){
+                WriteInChatBox("Command Usage: /run.\nToggles the ability to run super fast.");
+            }
+
+            if(strcmp(msg, "/help health") == 0){
+                WriteInChatBox("Command Usage: /health.\nToggles a health and mana cheat to improve regeneration and maximum values.");
+            }
+
+            if(strcmp(msg, "/help get_pos") == 0){
+                WriteInChatBox("Command Usage: /get_pos.\nReturns your current player position.");
+            }
+
+            if(strcmp(msg, "/help teleport") == 0){
+                WriteInChatBox("Command Usage: /teleport x y z.\nInput 3 float values to update your position with those values.");
+            }
+
+            if(strcmp(msg, "/help bearFlag") == 0){
+                WriteInChatBox("Command Usage: /bearFlag.\nToggles the frozen state at the chest for the bearFlag.");
+            }
+
+            if(strcmp(msg, "/help findEggs") == 0){
+                WriteInChatBox("Command Usage: /findEggs.\nUpdates an array to store all the goldenEgg objects.");
+            }
+
+            if(strcmp(msg, "/help tpEgg") == 0){
+                WriteInChatBox("Command Usage: /tpEgg.\nTeleports you to the next goldenEgg in the array, stepping through each time you call this command.");
+            }
+
+        }
     }
 
     if(strncmp(msg, "/locate", 7) == 0){
@@ -199,90 +246,26 @@ void Player::Chat(const char* msg){
             Utitilty cheat just to list the currently known locations by co-ordinates.
             Without input it lists their names and inputting a name will only display the position.
          */
-        
+
         if(strlen(msg) == 7){
             WriteInChatBox("Available locations:\nBallmerPeak, BearChestAbove, BearChestBelow");
-        }else{
-    
+        } else {
+
             if(strcmp(msg, "/locate BallmerPeak") == 0){
                 WriteInChatBox(" (X Y Z) -6791.0 -11655.0 10528.0");
             }
-            
+
             if(strcmp(msg, "/locate BearChestAbove") == 0){
                 WriteInChatBox(" (X Y Z) -7894.0 64482.0 2663.0");
             }
-            
+
             if(strcmp(msg, "/locate BearChestBelow") == 0){
                 WriteInChatBox(" (X Y Z) -7894.21 64499.97 2605.77");
             }
-            
-        }        
+
+        }
     }
 
-    if(strncmp(msg, "/say ", 5) == 0){
-       /*
-            Write a message to in-game chat, like a normal chat would behave.
-            Currently, it is throwing this error:
-
-                Player typed: /say hello!
-                terminate called after throwing an instance of 'std::logic_error'
-                what():  basic_string::_S_construct null not valid
-                ./run_game.sh: line 5: 10226 Aborted                 (core dumped) LD_PRELOAD=cheats/cheats.so ./PwnAdventure3-Linux-Shipping
-
-            Include an try{}catch(std::logic_error){} to mitigate the crash.
-            TODO: Fix this!
-       */
-
-        WriteInChatBox("!!! THIS CHEAT CRASHES THE GAME !!!");
-        WriteInChatBox("CHEATS: Send message to other players, like a normal chat.");
-        void (*realChat)(const char*) = (void (*)(const char*))dlsym(RTLD_NEXT,"_ZN6Player4ChatEPKc");
-        realChat(msg);
-    }
-      
-    if(strncmp(msg, "/help", 5) == 0){
-        /* 
-            Utitilty cheat just to list the available commands,
-            if they specify a command afterwards it describes the required input.
-        */
-        
-        if(strlen(msg) == 5){
-            WriteInChatBox("Available Commands:\n/fly, /run, /health,\n/get_pos, /teleport, /bearFlag,\n/findEggs, /tpEgg, /help,\n/locate, /help <command>");
-        } else {
-            
-            if(strcmp(msg, "/help fly") == 0){
-                WriteInChatBox("Command Usage: /fly.\nToggles the ability to fly in the direction you are looking.");
-            }
-            
-            if(strcmp(msg, "/help run") == 0){
-                WriteInChatBox("Command Usage: /run.\nToggles the ability to run super fast.");
-            }
-            
-            if(strcmp(msg, "/help health") == 0){
-                WriteInChatBox("Command Usage: /health.\nToggles a health and mana cheat to improve regeneration and maximum values.");
-            }
-            
-            if(strcmp(msg, "/help get_pos") == 0){
-                WriteInChatBox("Command Usage: /get_pos.\nReturns your current player position.");
-            }
-            
-            if(strcmp(msg, "/help teleport") == 0){
-                WriteInChatBox("Command Usage: /teleport x y z.\nInput 3 float values to update your position with those values.");
-            }
-            
-            if(strcmp(msg, "/help bearFlag") == 0){
-                WriteInChatBox("Command Usage: /bearFlag.\nToggles the frozen state at the chest for the bearFlag.");
-            }
-            
-            if(strcmp(msg, "/help findEggs") == 0){
-                WriteInChatBox("Command Usage: /findEggs.\nUpdates an array to store all the goldenEgg objects.");
-            }
-            
-            if(strcmp(msg, "/help tpEgg") == 0){
-                WriteInChatBox("Command Usage: /tpEgg.\nTeleports you to the next goldenEgg in the array, stepping through each time you call this command.");
-            }
-            
-        }        
-    }
 }
 
 bool Player::CanJump(){
